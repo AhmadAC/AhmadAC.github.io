@@ -1,0 +1,8 @@
+$ cat .gitignore
+#ignore folder: /folder/
+#ignore file: /FILE.FILE
+
+#Folders
+/Test image/
+/Ignore/
+/.git/

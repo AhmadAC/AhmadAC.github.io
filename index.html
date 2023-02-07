@@ -1,25 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
     <style>
-      /* Use flexbox to center the image horizontally and vertically */
-      .image-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 50vh; /* half of the viewport height */
-      }
-      /* Make the image responsive */
-      img {
-        max-width: 100%;
-        height: auto;
+      body {
+        background-color: #1A202C;
       }
     </style>
   </head>
-  <body>
-    <div class="image-container">
-      <img src="https://github.com/AhmadAC/ahmadac.github.io/blob/main/flag.png?raw=true" alt="A pirate flag">
-      
+  <body class="h-screen flex items-center justify-center">
+    <div class="flex-shrink-0">
+      <img src="https://github.com/AhmadAC/ahmadac.github.io/blob/main/flag.png?raw=true" alt="A pirate flag" class="w-64 h-64 object-cover">
     </div>
   </body>
 </html>

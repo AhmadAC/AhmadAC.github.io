@@ -152,8 +152,14 @@ function addRow(user) {
 
 function check(id) {
     var foundIndex = users.findIndex(u => u.id == id);
+
     users[foundIndex].check = !users[foundIndex].check;
-    users[foundIndex].checkTime = new Date();
+    if( users[foundIndex].check ){
+        users[foundIndex].checkTime = new Date();
+    }else{
+        users[foundIndex].checkTime = null;
+    }
+
     updateAllItem();
 }
 
@@ -194,7 +200,6 @@ function formatDateTime(unformattedDateTime){
     }
 
     let formattedDateTime = `${date}${suffix} ${days[day]} ${months[month]}, ${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}:${("0" + second).slice(-2)}`;
-
     return formattedDateTime;
 }
 

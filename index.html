@@ -367,7 +367,6 @@
         let filename = dateString + '_Report.xlsx';
         var ws = XLSX.utils.json_to_sheet(exportData);
         ws['!cols'] = Array.from({length: 4}, (_,i) => ({wch:20}));
-        ws['!style'] = { alignment: { horizontal: 'center' } };
         var wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "People");
         XLSX.writeFile(wb,filename);

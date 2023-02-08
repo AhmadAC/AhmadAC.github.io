@@ -1,16 +1,379 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.0/dist/tailwind.min.css" rel="stylesheet">
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
-      body {
-        background-color: #262e3d;
-      }
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #bottomNavbar {
+            margin-top: auto;
+        }
     </style>
-  </head>
-  <body class="h-screen">
-    <div class="top-0 left-0">
-      <img src="https://github.com/AhmadAC/ahmadac.github.io/blob/main/flag.png?raw=true" alt="A pirate flag" class="w-64 h-64 object-cover">
+</head>
+
+<body class="bg-dark">
+    <nav class="navbar bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Memet's Attendance</span>
+        </div>
+    </nav>
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-12 col-lg-6">
+                <div class="card mb-3 d-none d-md-block" data-bs-theme="dark">
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <textarea id="inputText2" class="form-control bg-dark text-light" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                                <label for="floatingTextarea2" class="text-light">List of Names</label>
+                            </div>
+                        </div>
+
+                        <button id="exportBtn2" 
+                            class="btn btn-success w-100 mt-2" 
+                            type="button"
+                            onclick="exportData()"
+                        >
+                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.txt)
+                        </button>
+
+                        <button id="submitBtn2"
+                            type="button"
+                            class="btn btn-primary w-100 mt-2"
+                            onclick="submit()">
+                            <i class="me-3 fa-solid fa-circle-plus"></i>
+                            Submit 
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6" data-bs-theme="dark">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <button id="clearBtn" 
+                                type="button" 
+                                class="btn btn-danger ratio-1x1 bg-opacity-10 border border-danger"
+                                onclick="reset()">
+                                    <i class="fa-solid fa-trash-can me-2"></i>
+                                    Clear All
+                                </button>
+                            </div>
+                            <div class="col">
+                                <p id="errorMessage" class="d-none m-0 w-100 p-2 bg-danger rounded text-danger bg-opacity-10 border border-danger">
+                                    Error Message
+                                </p>
+                                <p id="successMessage" class="d-none m-0 w-100 p-2 bg-success rounded text-success bg-opacity-10 border border-success">
+                                    Success Message
+                                </p>
+                                <p id="infoMessage" class="d-none m-0 w-100 p-2 bg-info rounded text-info bg-opacity-10 border border-info">
+                                    Info Message
+                                </p>
+                            </div>
+                        </div>
+                        <p id="errorMessage" style="color:red;display:none;"></p>
+                        <hr class="border border-light border-2 opacity-50">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col" class="text-center">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultList">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </body>
+
+    <nav id="bottomNavbar" class="navbar sticky-bottom border-top bg-dark d-md-none" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div class="mb-3 w-100">
+                <div class="form-floating">
+                    <textarea id="inputText" class="form-control bg-dark text-light" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
+                    <label for="floatingTextarea2" class="text-light">List of Names</label>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="exportBtn" 
+                        class="btn btn-success w-50 mt-2 me-1" 
+                        type="button"
+                        onclick="exportData()"
+                    >
+                        <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.txt)
+                    </button>
+                    <button id="submitBtn"
+                        type="button"
+                        class="btn btn-primary w-50 mt-2 ms-1" 
+                        onclick="submit()">
+                        <i class="me-3 fa-solid fa-circle-plus"></i>
+                        Submit 
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script> 
+<script>
+    let counter = 1;
+    let hasReset = false;
+    let users = [];
+    let maxId = 0;
+    let clearBtn = document.querySelector("#clearBtn");
+    let errorMessage = document.querySelector("#errorMessage");
+    let successMessage = document.querySelector("#successMessage");
+    let infoMessage = document.querySelector("#infoMessage");
+
+    let inputText = document.querySelector("#inputText");
+
+    let submitBtn = document.querySelector("#submitBtn");
+    let resultList = document.querySelector("#resultList");
+    let exportBtn = document.querySelector("#exportBtn");
+
+    setupTable();
+
+    async function submit(){
+        console.log(window.screen.width);
+        if(window.screen.width >= 767.98){
+            inputText = document.querySelector("#inputText2");
+        }
+        if( users.length > 0){
+            maxId = getHighestId(users);
+        }
+        let names = processInput(inputText.value);
+
+        if(names.length < 1){
+            showError(createError(422, 'Input is empty'));
+            return 0;
+        }
+
+        for (let name of names) {
+            try{
+                let user = await createItem(maxId + 1, name);
+                saveItem(user);
+            }catch(error){
+                showError(error);
+            }
+            maxId ++;
+        }
+        setupTable();
+    }
+
+    function processInput(inputText){
+        let list= inputText.split("\n").filter(Boolean);
+        return list;
+    }
+
+    function getHighestId(objectArray){
+        max = objectArray.reduce((a,b)=>a.id>b.id?a:b).id;;
+        return max;
+    }
+
+    function createItem(id, name){
+        return new Promise( function (resolve, reject){
+            if(name === ""){
+                error = createError(422, 'Input is empty');
+                reject(error);
+            } 
+
+            let data = {
+                id  : id,
+                name : name,
+                check : false
+            };
+            resolve(data);
+        });
+    }
+
+    function removeItem(id){
+        if(! id){
+            showError(createError(500, 'Item id was not recognized'));
+            return 0;
+        }
+        if (! confirm(`Are you sure want to delete this user ?`)) {
+            showInfo('Cancelled');
+            return 0;
+        }
+        deleteItem(id);
+        setupTable();
+        showSuccess('Data Removed');
+    }
+
+    function deleteItem(id){
+        users = users.filter(item => item.id !== id);
+        updateAllItem();
+    }
+
+    function saveItem(user){
+        users.push(user);
+        localStorage.setItem("users", JSON.stringify(users));
+        showSuccess('Data Saved');
+    }
+
+    function updateAllItem(){
+        localStorage.setItem("users", JSON.stringify(users));
+    }
+
+    function getItem(){
+        return new Promise(function(resolve, reject){
+            let users = localStorage.getItem("users");
+            if(users){
+                resolve(JSON.parse(users));
+            }else {
+                reject(createError(500, 'No User saved'));
+            }
+        });
+    }
+
+    async function setupTable(){
+        counter = 1;
+        resultList.innerHTML = "";
+        try{
+            let data = await getItem();
+            users = data;
+            for (let user of users) {
+                addRow(user)
+            }
+        }catch(error){
+            if(! hasReset ){
+                showError(error)
+            }
+        }
+        
+    }
+
+    function addRow(user){
+        let tr = document.createElement("tr");
+        
+        tr.innerHTML = `
+            <th scope="row">
+                <button
+                    type="button"
+                    onclick="removeItem(${user.id})"
+                    class="remove-btn me-2 btn btn-sm btn-outline-danger" 
+                >
+                    <i class="fa-solid fa-square-minus"></i>
+                </button>
+                ${counter}
+            </th>
+            <td>${user.name}</td>
+            <td class='text-center'>
+                <input class="form-check-input" type="checkbox" onclick="check(${user.id})" ${user.check ? 'checked': ''} >
+            </td>
+        `;
+
+        resultList.appendChild(tr);
+        counter ++;
+    }
+
+    function check(id){
+        var foundIndex = users.findIndex(u => u.id == id);
+        users[foundIndex].check = ! users[foundIndex].check;
+        updateAllItem();
+    }
+    
+    function reset(){
+        hasReset = true;
+        if(users.length == 0){
+            showError(createError(432, 'No Data Available'));
+            return 0;
+        }
+        if (confirm(`Are you sure want to delete All User ?`)) {
+            users = [];
+            localStorage.clear();
+            setupTable();
+            showSuccess('Data Cleared');
+        }else{
+            showInfo('Cancelled');
+        }
+    }
+
+    function prepareExportData(){
+        let objects = [];
+        let num = 1;
+        for (let i = 0 ; i < users.length ; i++) {
+            let nowDate = new Date();
+            let formattedDate = nowDate.getFullYear()+'/'+(nowDate.getMonth()+1)+'/'+nowDate.getDate();
+            let obj = {
+                number: num,
+                date: formattedDate,
+                name: users[i].name,
+                status : users[i].check ? 'Attend' : 'Absent',
+            }
+            objects.push(obj);
+            num++
+        }
+        return objects;
+    }
+
+    function exportData(){
+        let exportData =  prepareExportData();
+        if( exportData.length < 1){
+            showError(createError(432, 'No export Data'));
+            return 0;
+        }
+        
+        filename='reports.xlsx';
+        var ws = XLSX.utils.json_to_sheet(exportData);
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "People");
+        XLSX.writeFile(wb,filename);
+    }
+
+    function createError(statusCode, message){
+        let error = {
+            'status' : statusCode,
+            'message' : message
+        }
+        return error
+    }
+
+    function showError(error){
+        errorMessage.classList.remove("d-none");
+        errorMessage.innerHTML = error.message;
+        setTimeout(function(){
+            errorMessage.classList.add("d-none");
+        }, 3000);
+    }
+
+    function showSuccess(message){
+        successMessage.classList.remove("d-none");
+        successMessage.innerHTML = message;
+        setTimeout(function(){
+            successMessage.classList.add("d-none");
+        }, 3000);
+    }
+
+    function showInfo(message){
+        infoMessage.classList.remove("d-none");
+        infoMessage.innerHTML = message;
+        setTimeout(function(){
+            infoMessage.classList.add("d-none");
+        }, 3000);
+    }
+    
+    </script>
 </html>

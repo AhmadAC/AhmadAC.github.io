@@ -216,6 +216,7 @@ function resetCheck(){
     if (confirm(`Are you sure want to reset attendance?`)) {
         for (let i = 0; i < users.length; i++) {
             users[i].check = false;
+            users[i].checkTime = null;
         }
 
         updateAllItem();

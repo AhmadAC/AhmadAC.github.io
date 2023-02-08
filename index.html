@@ -77,9 +77,18 @@
                                         <p id="totalData" class="mb-1 fw-bold"> </p>
                                     </div>
 
-                                    <div class="col border-start">
+                                    <div class="col border-start border-end">
                                         <small class="text-muted">Attendance</small>
                                         <p id="attendancePercentage" class="mb-1"> </p>
+                                    </div>
+
+                                    <div class="col-auto align-self-center text-center">
+                                        <button id="resetAttendanceBtn" 
+                                            type="button" 
+                                            class="btn btn-outline-secondary ratio-1x1"
+                                            onclick="resetCheck()">
+                                                <i class="fa-solid fa-arrow-rotate-left"></i>
+                                            </button>
                                     </div>
                                 </div>
                             </div>
@@ -101,8 +110,10 @@
                             <thead>
                                 <tr>
                                     <th scope="col"><i class="fa-solid fa-list"></i></th>
-                                    <th scope="col">Name</th>
-                                    <th scope="col" class="text-center">Action</th>
+                                    <th scope="col" >Name</th>
+                                    <th scope="col" class="text-center">
+                                        Action
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody id="resultList">
@@ -147,5 +158,6 @@
     crossorigin="anonymous">
 </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script type="text/javascript" src="script.js"></script> 
 </html>

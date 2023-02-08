@@ -208,6 +208,25 @@ function reset() {
     }
 }
 
+function resetCheck(){
+    if (users.length == 0) {
+        showError(createError(432, 'No Data Available'));
+        return 0;
+    }
+    if (confirm(`Are you sure want to reset attendance?`)) {
+        for (let i = 0; i < users.length; i++) {
+            users[i].check = false;
+        }
+
+        updateAllItem();
+        setupTable();
+        showSuccess('Attendance Reset');
+    } else {
+        showInfo('Cancelled');
+    }
+    
+}
+
 function formatDateTime(unformattedDateTime){
     let date = unformattedDateTime.getDate();
     let day = unformattedDateTime.getDay();

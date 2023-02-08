@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Written by Ryvel Stamber and Ahmad Cooper-->
 <html lang="en">
 
 <head>
@@ -27,7 +28,7 @@
 <body class="bg-dark">
     <nav class="navbar bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
-            <span class="navbar-brand mb-0 h1">Memet's Attendance</span>
+            <span class="navbar-brand mb-0 h1">Student Attendance</span>
         </div>
     </nav>
     <div class="container mt-3">
@@ -47,7 +48,7 @@
                             type="button"
                             onclick="exportData()"
                         >
-                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.txt)
+                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
                         </button>
 
                         <button id="submitBtn2"
@@ -118,7 +119,7 @@
                         type="button"
                         onclick="exportData()"
                     >
-                        <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.txt)
+                        <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
                     </button>
                     <button id="submitBtn"
                         type="button"
@@ -316,12 +317,13 @@
         let num = 1;
         for (let i = 0 ; i < users.length ; i++) {
             let nowDate = new Date();
-            let formattedDate = nowDate.getFullYear()+'/'+(nowDate.getMonth()+1)+'/'+nowDate.getDate();
+            let formattedDate = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate() + ' ' + nowDate.getHours() + ':' + nowDate.getMinutes() + ':' + nowDate.getSeconds();
+            
             let obj = {
-                number: num,
-                date: formattedDate,
-                name: users[i].name,
-                status : users[i].check ? 'Attend' : 'Absent',
+                Number: num,
+                Date: formattedDate,
+                Name: users[i].name,
+                Status : users[i].check ? 'Present' : 'Absent',
             }
             objects.push(obj);
             num++
@@ -336,7 +338,10 @@
             return 0;
         }
         
-        filename='reports.xlsx';
+        
+        let nowDate = new Date();
+        let dateString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
+        let filename = dateString + '_Report.xlsx';
         var ws = XLSX.utils.json_to_sheet(exportData);
         var wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "People");

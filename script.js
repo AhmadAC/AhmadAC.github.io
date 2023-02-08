@@ -228,6 +228,7 @@ function resetCheck(){
 }
 
 function formatDateTime(unformattedDateTime){
+    unformattedDateTime = new Date(unformattedDateTime);
     let date = unformattedDateTime.getDate();
     let day = unformattedDateTime.getDay();
     let month = unformattedDateTime.getMonth();

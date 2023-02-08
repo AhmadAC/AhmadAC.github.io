@@ -59,37 +59,48 @@
             <div class="col-12 col-lg-6" data-bs-theme="dark">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <button id="clearBtn" 
-                                type="button" 
-                                class="btn btn-danger ratio-1x1 bg-opacity-10 border border-danger"
-                                onclick="reset()">
-                                    <i class="fa-solid fa-trash-can me-2"></i>
-                                    Clear All
-                                </button>
-                            </div>
+                        <div class="card text-white">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-auto align-self-center">
+                                        <button id="clearBtn" 
+                                        type="button" 
+                                        class="btn btn-danger ratio-1x1 bg-opacity-10 border border-danger"
+                                        onclick="reset()">
+                                            <i class="fa-solid fa-trash-can"></i>
+                                            <span class="d-none d-md-inline ms-2">Clear All</span>
+                                        </button>
+                                    </div>
 
-                            <div class="col">
-                                <p id="errorMessage" class="d-none m-0 w-100 p-2 bg-danger rounded text-danger bg-opacity-10 border border-danger">
-                                    Error Message
-                                </p>
-                                <p id="successMessage" class="d-none m-0 w-100 p-2 bg-success rounded text-success bg-opacity-10 border border-success">
-                                    Success Message
-                                </p>
-                                <p id="infoMessage" class="d-none m-0 w-100 p-2 bg-info rounded text-info bg-opacity-10 border border-info">
-                                    Info Message
-                                </p>
+                                    <div class="col border-start">
+                                        <small class="text-muted">Total</small>
+                                        <p id="totalData" class="mb-1 fw-bold"> </p>
+                                    </div>
+
+                                    <div class="col border-start">
+                                        <small class="text-muted">Attendance</small>
+                                        <p id="attendancePercentage" class="mb-1"> </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <p id="errorMessage" style="color:red;display:none;"></p>
+                        <p id="errorMessage" class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-danger rounded text-danger bg-opacity-10 border border-danger">
+                            Error Message
+                        </p>
+                        <p id="successMessage" class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-success rounded text-success bg-opacity-10 border border-success">
+                            Success Message
+                        </p>
+                        <p id="infoMessage" class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-info rounded text-info bg-opacity-10 border border-info">
+                            Info Message
+                        </p>
+
                         <hr class="border border-light border-2 opacity-50">
 
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col"><i class="fa-solid fa-list"></i></th>
                                     <th scope="col">Name</th>
                                     <th scope="col" class="text-center">Action</th>
                                 </tr>

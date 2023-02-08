@@ -6,6 +6,8 @@ let clearBtn = document.querySelector("#clearBtn");
 let errorMessage = document.querySelector("#errorMessage");
 let successMessage = document.querySelector("#successMessage");
 let infoMessage = document.querySelector("#infoMessage");
+let attendancePercentage = document.querySelector("#attendancePercentage");
+let totalData = document.querySelector("#totalData");
 
 let inputText = document.querySelector("#inputText");
 
@@ -16,7 +18,6 @@ let exportBtn = document.querySelector("#exportBtn");
 setupTable();
 
 async function submit() {
-    console.log(window.screen.width);
     if (window.screen.width >= 767.98) {
         inputText = document.querySelector("#inputText2");
     }
@@ -124,6 +125,8 @@ async function setupTable() {
         }
     }
 
+    totalData.innerHTML = `<i class="me-1 fa-solid fa-user-group"></i> ${users.length} `;
+    setAttendancePercentage(calculateAttendancePercentage(users));
 }
 
 function addRow(user) {
@@ -161,6 +164,32 @@ function check(id) {
     }
 
     updateAllItem();
+    setAttendancePercentage(calculateAttendancePercentage(users));
+}
+
+function calculateAttendancePercentage(array) {
+    let attendanceCount = 0;
+    for (let i = 0; i < array.length; i++) {
+      if (array[i].check) {
+        attendanceCount ++;
+      }
+    }
+    let divider = array.length == 0 ? 1 : array.length ;
+    return (attendanceCount / divider) * 100;
+}
+
+function setAttendancePercentage(value){
+    attendancePercentage.innerHTML = `${value.toFixed(2)}%`;
+
+    if(value == 100){
+        attendancePercentage.className = "mb-1 fw-bold text-success-emphasis border-success border rounded-pill px-2 text-center bg-success bg-opacity-25";
+    } else if(value > 70){
+        attendancePercentage.className = "mb-1 fw-bold text-info";
+    } else if (value >= 50 && value <=70){
+        attendancePercentage.className = "mb-1 fw-bold text-warning";
+    } else {
+        attendancePercentage.className = "mb-1 fw-bold text-danger";
+    }
 }
 
 function reset() {
@@ -171,7 +200,7 @@ function reset() {
     }
     if (confirm(`Are you sure want to delete all the names?`)) {
         users = [];
-        localStorage.clear();
+        localStorage.removeItem('users');
         setupTable();
         showSuccess('Data Cleared');
     } else {
@@ -205,18 +234,18 @@ function formatDateTime(unformattedDateTime){
 
 function prepareExportData() {
     let objects = [];
-
     for (let i = 0; i < users.length; i++) {
         let checkTime = users[i].checkTime ? formatDateTime(users[i].checkTime) : ' n/a ';
-
         let obj = {
             Number: i + 1,
             CheckTime: checkTime,
             Name: users[i].name,
             Status: users[i].check ? 'Present' : 'Absent',
         }
+
         objects.push(obj);
     }
+
     return objects;
 }
 

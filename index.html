@@ -6,7 +6,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Student Attendance</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -43,6 +44,14 @@
                             </div>
                         </div>
 
+                        <button id="submitBtn2"
+                        type="button"
+                        class="btn btn-primary w-100 mt-2"
+                        onclick="submit()">
+                        <i class="me-3 fa-solid fa-circle-plus"></i>
+                        Submit 
+                        </button>
+
                         <button id="exportBtn2" 
                             class="btn btn-success w-100 mt-2" 
                             type="button"
@@ -51,13 +60,7 @@
                             <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
                         </button>
 
-                        <button id="submitBtn2"
-                            type="button"
-                            class="btn btn-primary w-100 mt-2"
-                            onclick="submit()">
-                            <i class="me-3 fa-solid fa-circle-plus"></i>
-                            Submit 
-                        </button>
+
                     </div>
                 </div>
             </div>
@@ -165,6 +168,7 @@
             maxId = getHighestId(users);
         }
         let names = processInput(inputText.value);
+        inputText.value = "";
 
         if(names.length < 1){
             showError(createError(422, 'Input is empty'));
@@ -293,8 +297,10 @@
     function check(id){
         var foundIndex = users.findIndex(u => u.id == id);
         users[foundIndex].check = ! users[foundIndex].check;
+        users[foundIndex].checkTime = new Date();
         updateAllItem();
-    }
+      }
+      
     
     function reset(){
         hasReset = true;
@@ -302,7 +308,7 @@
             showError(createError(432, 'No Data Available'));
             return 0;
         }
-        if (confirm(`Are you sure want to delete All User ?`)) {
+        if (confirm(`Are you sure want to delete all the names?`)) {
             users = [];
             localStorage.clear();
             setupTable();
@@ -312,41 +318,58 @@
         }
     }
 
-    function prepareExportData(){
+    function prepareExportData() {
         let objects = [];
         let num = 1;
-        for (let i = 0 ; i < users.length ; i++) {
-            let nowDate = new Date();
-            let formattedDate = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + nowDate.getDate() + ' ' + nowDate.getHours() + ':' + nowDate.getMinutes() + ':' + nowDate.getSeconds();
-            
-            let obj = {
-                Number: num,
-                Date: formattedDate,
-                Name: users[i].name,
-                Status : users[i].check ? 'Present' : 'Absent',
-            }
-            objects.push(obj);
-            num++
+        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      
+        for (let i = 0; i < users.length; i++) {
+          let checkTime = users[i].checkTime ? users[i].checkTime : new Date();
+          let date = checkTime.getDate();
+          let suffix = "th";
+          if (date % 10 === 1 && date % 100 !== 11) {
+            suffix = "st";
+          } else if (date % 10 === 2 && date % 100 !== 12) {
+            suffix = "nd";
+          } else if (date % 10 === 3 && date % 100 !== 13) {
+            suffix = "rd";
+          }
+          
+          let formattedCheckTime = `${date}${suffix} ${days[checkTime.getDay()]} ${months[checkTime.getMonth()]}, ${("0" + checkTime.getHours()).slice(-2)}:${("0" + checkTime.getMinutes()).slice(-2)}:${("0" + checkTime.getSeconds()).slice(-2)}`;
+
+          let obj = {
+            Number: num,
+            CheckTime: formattedCheckTime,
+            Name: users[i].name,
+            Status: users[i].check ? 'Present' : 'Absent',
+          }
+          objects.push(obj);
+          num++;
         }
         return objects;
-    }
+      }
+      
+      
 
-    function exportData(){
+      function exportData(){
         let exportData =  prepareExportData();
         if( exportData.length < 1){
             showError(createError(432, 'No export Data'));
             return 0;
         }
-        
-        
+    
         let nowDate = new Date();
         let dateString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
         let filename = dateString + '_Report.xlsx';
         var ws = XLSX.utils.json_to_sheet(exportData);
+        ws['!cols'] = Array.from({length: 4}, (_,i) => ({wch:20}));
+        ws['!style'] = { alignment: { horizontal: 'center' } };
         var wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "People");
         XLSX.writeFile(wb,filename);
     }
+    
 
     function createError(statusCode, message){
         let error = {

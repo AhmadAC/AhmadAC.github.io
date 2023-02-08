@@ -173,34 +173,44 @@ function reset() {
     }
 }
 
-function prepareExportData() {
-    let objects = [];
-    let num = 1;
+function formatDateTime(unformattedDateTime){
+    let date = unformattedDateTime.getDate();
+    let day = unformattedDateTime.getDay();
+    let month = unformattedDateTime.getMonth();
+    let hour = unformattedDateTime.getHours();
+    let minute = unformattedDateTime.getMinutes();
+    let second = unformattedDateTime.getSeconds();
+    
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-    for (let i = 0; i < users.length; i++) {
-        let checkTime = users[i].checkTime ? users[i].checkTime : new Date();
-        let date = checkTime.getDate();
-        let suffix = "th";
-        if (date % 10 === 1 && date % 100 !== 11) {
-            suffix = "st";
-        } else if (date % 10 === 2 && date % 100 !== 12) {
-            suffix = "nd";
-        } else if (date % 10 === 3 && date % 100 !== 13) {
-            suffix = "rd";
-        }
+    let suffix = "th";
+    if (date % 10 === 1 && date % 100 !== 11) {
+        suffix = "st";
+    } else if (date % 10 === 2 && date % 100 !== 12) {
+        suffix = "nd";
+    } else if (date % 10 === 3 && date % 100 !== 13) {
+        suffix = "rd";
+    }
 
-        let formattedCheckTime = `${date}${suffix} ${days[checkTime.getDay()]} ${months[checkTime.getMonth()]}, ${("0" + checkTime.getHours()).slice(-2)}:${("0" + checkTime.getMinutes()).slice(-2)}:${("0" + checkTime.getSeconds()).slice(-2)}`;
+    let formattedDateTime = `${date}${suffix} ${days[day]} ${months[month]}, ${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}:${("0" + second).slice(-2)}`;
+
+    return formattedDateTime;
+}
+
+function prepareExportData() {
+    let objects = [];
+
+    for (let i = 0; i < users.length; i++) {
+        let checkTime = users[i].checkTime ? formatDateTime(users[i].checkTime) : ' n/a ';
 
         let obj = {
-            Number: num,
-            CheckTime: formattedCheckTime,
+            Number: i + 1,
+            CheckTime: checkTime,
             Name: users[i].name,
             Status: users[i].check ? 'Present' : 'Absent',
         }
         objects.push(obj);
-        num++;
     }
     return objects;
 }

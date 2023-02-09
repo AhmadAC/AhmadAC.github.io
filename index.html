@@ -36,22 +36,25 @@
                                 <label for="floatingTextarea2" class="text-light">List of Names</label>
                             </div>
                         </div>
-
-                        <button id="submitBtn2"
-                        type="button"
-                        class="btn btn-primary w-100 mt-2"
-                        onclick="submit()">
-                        <i class="me-3 fa-solid fa-circle-plus"></i>
-                        Submit 
-                        </button>
-
-                        <button id="exportBtn2" 
-                            class="btn btn-success w-100 mt-2" 
-                            type="button"
-                            onclick="exportData()"
-                        >
-                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
-                        </button>
+                        <div class="row">
+                            <div class="col">
+                                <button id="exportBtn2" 
+                                    class="btn btn-success bg-success-20 w-100 mt-1 py-2" 
+                                    type="button"
+                                    onclick="exportData()">
+                                    <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
+                                </button>
+                            </div>
+                            <div class="col">
+                                <button id="submitBtn2"
+                                    type="button"
+                                    class="btn btn-primary w-100 mt-1 py-2"
+                                    onclick="submit()">
+                                    <i class="me-3 fa-solid fa-circle-plus"></i>
+                                    Submit 
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -62,35 +65,50 @@
                         <div class="card text-white">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-auto align-self-center">
-                                        <button id="clearBtn" 
-                                        type="button" 
-                                        class="btn btn-danger ratio-1x1 bg-opacity-10 border border-danger"
-                                        onclick="reset()">
-                                            <i class="fa-solid fa-trash-can"></i>
-                                            <span class="d-none d-md-inline ms-2">Clear All</span>
-                                        </button>
+                                    <div class="col">
+                                        <div class="row">
+                                            <div class="col">
+                                                <small class="text-muted">Total</small>
+                                                <p id="totalData" class="mb-1 fw-bold"> </p>
+                                            </div>
+        
+                                            <div class="col border-start">
+                                                <small class="text-muted">Attendance</small>
+                                                <p id="attendancePercentage" class="mb-1"> </p>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <button id="clearBtn" 
+                                                type="button" 
+                                                class="btn btn-outline-danger w-100"
+                                                onclick="reset()">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                    <span class="d-none d-md-inline ms-2">Clear All</span>
+                                                </button>
+                                            </div>
+                                            <div class="col">
+                                                <button id="resetAttendanceBtn" 
+                                                    type="button" 
+                                                    class="btn btn-outline-secondary w-100"
+                                                    onclick="resetCheck()">
+                                                        <i class="fa-solid fa-arrow-rotate-left"></i>
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
-
-                                    <div class="col border-start">
-                                        <small class="text-muted">Total</small>
-                                        <p id="totalData" class="mb-1 fw-bold"> </p>
-                                    </div>
-
-                                    <div class="col border-start border-end">
-                                        <small class="text-muted">Attendance</small>
-                                        <p id="attendancePercentage" class="mb-1"> </p>
-                                    </div>
-
-                                    <div class="col-auto align-self-center text-center">
+                                    <div class="col-4">
                                         <button id="resetAttendanceBtn" 
                                             type="button" 
-                                            class="btn btn-outline-secondary ratio-1x1"
-                                            onclick="resetCheck()">
-                                                <i class="fa-solid fa-arrow-rotate-left"></i>
-                                            </button>
+                                            class="btn btn-info w-100 h-100"
+                                            onclick="checkAll()">
+                                            <i class="fa-solid fa-clipboard-check"></i>
+                                            <br>
+                                            <small class="fw-bold">Check All</small>
+                                        </button>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
 
@@ -106,20 +124,27 @@
 
                         <hr class="border border-light border-2 opacity-50">
 
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col"><i class="fa-solid fa-list"></i></th>
-                                    <th scope="col" >Name</th>
-                                    <th scope="col" class="text-center">
-                                        Present
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody id="resultList">
+                        <div>
+                            <table class="table mb-0">
+                                <thead>
+                                    <tr>
+                                        <th scope="col"><i class="fa-solid fa-list"></i></th>
+                                        <th scope="col" >Name</th>
+                                        <th scope="col" class="text-center">
+                                            Present
+                                        </th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
 
-                            </tbody>
-                        </table>
+                        <div class="overflow-auto mh-48vh">
+                            <table class="table mb-1">
+                                <tbody id="resultList">
+
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,7 +160,7 @@
                 </div>
                 <div class="d-flex justify-content-center">
                     <button id="exportBtn" 
-                        class="btn btn-success w-50 mt-2 me-1" 
+                        class="btn btn-success bg-success-20 w-50 mt-2 me-1 py-2" 
                         type="button"
                         onclick="exportData()"
                     >
@@ -143,7 +168,7 @@
                     </button>
                     <button id="submitBtn"
                         type="button"
-                        class="btn btn-primary w-50 mt-2 ms-1" 
+                        class="btn btn-primary w-50 mt-2 ms-1 py-2" 
                         onclick="submit()">
                         <i class="me-3 fa-solid fa-circle-plus"></i>
                         Submit 

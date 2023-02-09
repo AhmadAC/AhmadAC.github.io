@@ -182,7 +182,7 @@ function setAttendancePercentage(value){
     attendancePercentage.innerHTML = `${value.toFixed(2)}%`;
 
     if(value == 100){
-        attendancePercentage.className = "mb-1 fw-bold text-success-emphasis border-success border rounded-pill px-2 text-center bg-success bg-opacity-25";
+        attendancePercentage.className = "mb-1 fw-bold text-success-emphasis";
     } else if(value > 70){
         attendancePercentage.className = "mb-1 fw-bold text-info";
     } else if (value >= 50 && value <=70){
@@ -225,7 +225,26 @@ function resetCheck(){
     } else {
         showInfo('Cancelled');
     }
-    
+}
+
+function checkAll(){
+    if (users.length == 0) {
+        showError(createError(432, 'No Data Available'));
+        return 0;
+    }
+
+    if (confirm(`Are you sure want to check all attendance?`)) {
+        for (let i = 0; i < users.length; i++) {
+            if(! users[i].check){
+                check(users[i].id);
+            }
+        }
+
+        setupTable();
+        showSuccess('Checked All');
+    } else {
+        showInfo('Cancelled');
+    }
 }
 
 function formatDateTime(unformattedDateTime){

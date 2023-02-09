@@ -151,13 +151,42 @@
         </div>
     </div>
 
-    <nav id="bottomNavbar" class="navbar sticky-bottom border-top bg-dark d-md-none" data-bs-theme="dark">
-        <div class="container-fluid">
-            <div class="mb-3 w-100">
+    <!-- Modal -->
+    <div class="modal fade" id="addStudentModal" tabindex="-1" aria-labelledby="addStudentModalLabel" aria-hidden="true" data-bs-theme="dark">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="addStudentModalLabel">
+                    <i class="me-3 fa-solid fa-circle-plus"></i>
+                    Add Student
+                </h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
                 <div class="form-floating">
                     <textarea id="inputText" class="form-control bg-dark text-light" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
                     <label for="floatingTextarea2" class="text-light">List of Names</label>
                 </div>
+
+                
+            </div>
+            <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                <button id="submitBtn"
+                    type="button"
+                    class="btn btn-success w-100 py-2" 
+                    onclick="submit()">
+                    <i class="me-2 fa-solid fa-floppy-disk"></i>
+                    Save
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <nav id="bottomNavbar" class="navbar sticky-bottom border-top bg-dark d-md-none" data-bs-theme="dark">
+        <div class="container-fluid">
+            <div class="mb-3 w-100">
                 <div class="d-flex justify-content-center">
                     <button id="exportBtn" 
                         class="btn btn-success bg-success-20 w-50 mt-2 me-1 py-2" 
@@ -169,9 +198,9 @@
                     <button id="submitBtn"
                         type="button"
                         class="btn btn-primary w-50 mt-2 ms-1 py-2" 
-                        onclick="submit()">
+                        data-bs-toggle="modal" data-bs-target="#addStudentModal">
                         <i class="me-3 fa-solid fa-circle-plus"></i>
-                        Submit 
+                        Add Student(s)
                     </button>
                 </div>
             </div>

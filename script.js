@@ -279,11 +279,11 @@ function exportData() {
 
     let nowDate = new Date();
     let dateString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
-    let filename = dateString + '_Report.xlsx';
+    let filename = dateString + '_Attendance.xlsx';
     var ws = XLSX.utils.json_to_sheet(exportData);
     ws['!cols'] = Array.from({ length: 4 }, (_, i) => ({ wch: 20 }));
     var wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "People");
+    XLSX.utils.book_append_sheet(wb, ws, "Names");
     XLSX.writeFile(wb, filename);
 }
 

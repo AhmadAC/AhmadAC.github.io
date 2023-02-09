@@ -14,3 +14,10 @@ body {
 .bg-success-20{
     background-color: rgb(15, 146, 15,0.2);
 }
+.w-80{
+    width: 80px;
+}
+
+.w-96{
+    width: 96px;
+}

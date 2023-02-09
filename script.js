@@ -133,7 +133,7 @@ function addRow(user) {
     let tr = document.createElement("tr");
 
     tr.innerHTML = `
-            <th scope="row">
+            <th scope="row" class="w-80">
                 <button
                     type="button"
                     onclick="removeItem(${user.id})"
@@ -144,7 +144,7 @@ function addRow(user) {
                 ${counter}
             </th>
             <td>${user.name}</td>
-            <td class='text-center'>
+            <td class='text-center w-96'>
                 <input class="form-check-input" type="checkbox" onclick="check(${user.id})" ${user.check ? 'checked' : ''} >
             </td>
         `;

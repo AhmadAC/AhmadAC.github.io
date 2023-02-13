@@ -158,9 +158,9 @@ function check(id) {
 
     users[foundIndex].check = !users[foundIndex].check;
     if( users[foundIndex].check ){
-        users[foundIndex].checkTime = new Date();
+        users[foundIndex].Arrival = new Date();
     }else{
-        users[foundIndex].checkTime = null;
+        users[foundIndex].Arrival = null;
     }
 
     updateAllItem();
@@ -216,7 +216,7 @@ function resetCheck(){
     if (confirm(`Are you sure want to reset attendance?`)) {
         for (let i = 0; i < users.length; i++) {
             users[i].check = false;
-            users[i].checkTime = null;
+            users[i].Arrival = null;
         }
 
         updateAllItem();
@@ -275,10 +275,10 @@ function formatDateTime(unformattedDateTime){
 function prepareExportData() {
     let objects = [];
     for (let i = 0; i < users.length; i++) {
-        let checkTime = users[i].checkTime ? formatDateTime(users[i].checkTime) : ' n/a ';
+        let Arrival = users[i].Arrival ? formatDateTime(users[i].Arrival) : ' n/a ';
         let obj = {
             Number: i + 1,
-            CheckTime: checkTime,
+            Arrival: Arrival,
             Name: users[i].name,
             Status: users[i].check ? 'Present' : 'Absent',
         }

@@ -45,9 +45,9 @@ async function submit() {
 }
 
 function processInput(inputText) {
-    let list = inputText.split("\n").filter(Boolean);
-    return list;
+  return inputText.split(/[\n,]/).filter(Boolean);
 }
+
 
 function getHighestId(objectArray) {
     max = objectArray.reduce((a, b) => a.id > b.id ? a : b).id;;

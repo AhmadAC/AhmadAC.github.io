@@ -268,7 +268,7 @@ function formatDateTime(unformattedDateTime){
         suffix = "rd";
     }
 
-    let formattedDateTime = `${date}${suffix} ${days[day]} ${months[month]}, ${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}:${("0" + second).slice(-2)}`;
+    let formattedDateTime = `${days[day]} ${date}${suffix} ${months[month]}, ${("0" + hour).slice(-2)}:${("0" + minute).slice(-2)}:${("0" + second).slice(-2)}`;
     return formattedDateTime;
 }
 

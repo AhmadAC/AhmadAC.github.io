@@ -64,8 +64,10 @@ function createItem(id, name) {
         let data = {
             id: id,
             name: name,
-            check: false
+            check: false,
+            late: false
         };
+
         resolve(data);
     });
 }
@@ -144,6 +146,9 @@ function addRow(user) {
                 ${counter}
             </th>
             <td>${user.name}</td>
+            <td class='text-center w-64'>
+                <input class="form-check-input late-checkbox" type="checkbox" onclick="checkLate(${user.id})" ${user.late ? 'checked' : ''} >
+            </td>
             <td class='text-center w-96'>
                 <input class="form-check-input" type="checkbox" onclick="check(${user.id})" ${user.check ? 'checked' : ''} >
             </td>
@@ -153,18 +158,39 @@ function addRow(user) {
     counter++;
 }
 
-function check(id) {
+function check( id ) {
     var foundIndex = users.findIndex(u => u.id == id);
-
     users[foundIndex].check = !users[foundIndex].check;
     if( users[foundIndex].check ){
         users[foundIndex].Arrival = new Date();
     }else{
         users[foundIndex].Arrival = null;
+
+        if(users[foundIndex].late){
+            users[foundIndex].late = false;
+
+            updateAllItem();
+            setupTable();
+            setAttendancePercentage(calculateAttendancePercentage(users));
+        }
     }
 
     updateAllItem();
     setAttendancePercentage(calculateAttendancePercentage(users));
+}
+
+function checkLate(id) {
+    var foundIndex = users.findIndex(u => u.id == id);
+
+    if(users[foundIndex].check){
+        users[foundIndex].late = !users[foundIndex].late;
+
+        updateAllItem();
+        setupTable();
+    }else{
+        showInfo('Student is not present');
+        setupTable();
+    }
 }
 
 function calculateAttendancePercentage(array) {
@@ -216,6 +242,7 @@ function resetCheck(){
     if (confirm(`Are you sure want to reset attendance?`)) {
         for (let i = 0; i < users.length; i++) {
             users[i].check = false;
+            users[i].late= false;
             users[i].Arrival = null;
         }
 
@@ -281,6 +308,7 @@ function prepareExportData() {
             Arrival: Arrival,
             Name: users[i].name,
             Status: users[i].check ? 'Present' : 'Absent',
+            Late: users[i].late ? 'Late' : '-'
         }
 
         objects.push(obj);

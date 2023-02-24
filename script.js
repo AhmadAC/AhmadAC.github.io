@@ -188,8 +188,8 @@ function checkLate(id) {
         updateAllItem();
         setupTable();
     }else{
-        showInfo('Student is not present');
-        setupTable();
+        check(id);
+	    checkLate(id);
     }
 }
 

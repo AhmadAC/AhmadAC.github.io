@@ -185,6 +185,11 @@ function checkLate(id) {
     if (users[foundIndex].check) {
         users[foundIndex].late = !users[foundIndex].late;
 
+        // If the student is marked late, set the Arrival property to the current date and time
+        if (users[foundIndex].late) {
+            users[foundIndex].Arrival = new Date();
+        }
+
         updateAllItem();
         setupTable();
     } else {
@@ -192,6 +197,7 @@ function checkLate(id) {
         checkLate(id);
     }
 }
+
 
 function calculateAttendancePercentage(array) {
     let attendanceCount = 0;

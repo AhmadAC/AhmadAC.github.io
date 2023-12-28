@@ -45,7 +45,7 @@ async function submit() {
 }
 
 function processInput(inputText) {
-  return inputText.split(/[\n,]/).filter(Boolean);
+    return inputText.split(/[\n,]/).filter(Boolean);
 }
 
 
@@ -139,7 +139,7 @@ function addRow(user) {
                 <button
                     type="button"
                     onclick="removeItem(${user.id})"
-                    class="remove-btn me-2 btn btn-sm btn-outline-danger" 
+                    class="remove-btn me-2 btn btn-sm btn-outline-danger"
                 >
                     <i class="fa-solid fa-square-minus"></i>
                 </button>
@@ -158,15 +158,15 @@ function addRow(user) {
     counter++;
 }
 
-function check( id ) {
+function check(id) {
     var foundIndex = users.findIndex(u => u.id == id);
     users[foundIndex].check = !users[foundIndex].check;
-    if( users[foundIndex].check ){
+    if (users[foundIndex].check) {
         users[foundIndex].Arrival = new Date();
-    }else{
+    } else {
         users[foundIndex].Arrival = null;
 
-        if(users[foundIndex].late){
+        if (users[foundIndex].late) {
             users[foundIndex].late = false;
 
             updateAllItem();
@@ -182,36 +182,36 @@ function check( id ) {
 function checkLate(id) {
     var foundIndex = users.findIndex(u => u.id == id);
 
-    if(users[foundIndex].check){
+    if (users[foundIndex].check) {
         users[foundIndex].late = !users[foundIndex].late;
 
         updateAllItem();
         setupTable();
-    }else{
+    } else {
         check(id);
-	    checkLate(id);
+        checkLate(id);
     }
 }
 
 function calculateAttendancePercentage(array) {
     let attendanceCount = 0;
     for (let i = 0; i < array.length; i++) {
-      if (array[i].check) {
-        attendanceCount ++;
-      }
+        if (array[i].check) {
+            attendanceCount++;
+        }
     }
-    let divider = array.length == 0 ? 1 : array.length ;
+    let divider = array.length == 0 ? 1 : array.length;
     return (attendanceCount / divider) * 100;
 }
 
-function setAttendancePercentage(value){
+function setAttendancePercentage(value) {
     attendancePercentage.innerHTML = `${value.toFixed(2)}%`;
 
-    if(value == 100){
+    if (value == 100) {
         attendancePercentage.className = "mb-1 fw-bold text-success-emphasis";
-    } else if(value > 70){
+    } else if (value > 70) {
         attendancePercentage.className = "mb-1 fw-bold text-info";
-    } else if (value >= 50 && value <=70){
+    } else if (value >= 50 && value <= 70) {
         attendancePercentage.className = "mb-1 fw-bold text-warning";
     } else {
         attendancePercentage.className = "mb-1 fw-bold text-danger";
@@ -234,7 +234,7 @@ function reset() {
     }
 }
 
-function resetCheck(){
+function resetCheck() {
     if (users.length == 0) {
         showError(createError(432, 'No Data Available'));
         return 0;
@@ -242,7 +242,7 @@ function resetCheck(){
     if (confirm(`Are you sure want to reset attendance?`)) {
         for (let i = 0; i < users.length; i++) {
             users[i].check = false;
-            users[i].late= false;
+            users[i].late = false;
             users[i].Arrival = null;
         }
 
@@ -254,7 +254,7 @@ function resetCheck(){
     }
 }
 
-function checkAll(){
+function checkAll() {
     if (users.length == 0) {
         showError(createError(432, 'No Data Available'));
         return 0;
@@ -262,7 +262,7 @@ function checkAll(){
 
     if (confirm(`Are you sure want to check all attendance?`)) {
         for (let i = 0; i < users.length; i++) {
-            if(! users[i].check){
+            if (!users[i].check) {
                 check(users[i].id);
             }
         }
@@ -274,7 +274,7 @@ function checkAll(){
     }
 }
 
-function formatDateTime(unformattedDateTime){
+function formatDateTime(unformattedDateTime) {
     unformattedDateTime = new Date(unformattedDateTime);
     let date = unformattedDateTime.getDate();
     let day = unformattedDateTime.getDay();
@@ -282,7 +282,7 @@ function formatDateTime(unformattedDateTime){
     let hour = unformattedDateTime.getHours();
     let minute = unformattedDateTime.getMinutes();
     let second = unformattedDateTime.getSeconds();
-    
+
     let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -332,6 +332,62 @@ function exportData() {
     var wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Names");
     XLSX.writeFile(wb, filename);
+}
+
+function generateSummary() {
+    let objects = prepareExportData();
+    generateHTMLTable(objects)
+}
+
+function generateHTMLTable(objects) {
+    let html = '<table id="summary-table" border="1" class="table table-striped table-light table-hover w-100 mb-0">';
+
+    html += '<tr class="bg-light">';
+    for (let key in objects[0]) {
+        html += `<th>${key}</th>`;
+    }
+    html += '</tr>';
+
+    // Add table body rows with alternating colors
+    for (let i = 0; i < objects.length; i++) {
+        html += '<tr>';
+        for (let key in objects[i]) {
+            html += `<td style="white-space: nowrap;">${objects[i][key]}</td>`;
+        }
+        html += '</tr>';
+    }
+
+    html += '</table>';
+    document.getElementById('summary-container').innerHTML = html;
+}
+
+function downloadDivAsImage(divId, fileName) {
+    // Get the HTML element to capture
+    const element = document.getElementById(divId);
+
+    // Use dom-to-image to capture the content as an image
+    domtoimage.toBlob(element)
+        .then(blob => {
+            // Create a link element and set its attributes
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName || 'download.png';
+
+            // Trigger a click on the link to start the download
+            link.click();
+        })
+        .catch(error => {
+            console.error('Error capturing div as image:', error);
+        });
+}
+
+function downloadSummaryTable() {
+    generateSummary();
+    let nowDate = new Date();
+    let dateString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
+    let filename = dateString + '_Attendance.png';
+
+    downloadDivAsImage('summary-container', filename);
 }
 
 function createError(statusCode, message) {

@@ -587,14 +587,14 @@ async function setupConfig() {
         document.getElementById("clockInTimeInput").value = config.clockInTime;
         document.getElementById("lateConfigSelect").value = config.lateType ?? 'current';
         document.getElementById("lateIntervalInput").value = config.lateInterval;
-
-        disableDependencyInput('clockInDateConfigSelect', 'clockInDateInput', 'current');
-        disableDependencyInput('clockInTimeConfigSelect', 'clockInTimeInput', 'current');
-        disableDependencyInput('lateConfigSelect', 'lateIntervalInput', 'current');
     } catch (error) {
         config = {};
         console.log(error);
     }
+
+    disableDependencyInput('clockInDateConfigSelect', 'clockInDateInput', 'current');
+    disableDependencyInput('clockInTimeConfigSelect', 'clockInTimeInput', 'current');
+    disableDependencyInput('lateConfigSelect', 'lateIntervalInput', 'current');
 }
 
 function createError(statusCode, message) {

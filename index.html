@@ -41,16 +41,83 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <button id="exportBtn2" class="btn btn-success bg-success-20 w-100 mt-1 py-2"
-                                    type="button" onclick="exportData()">
-                                    <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
-                                </button>
-                            </div>
-                            <div class="col">
                                 <button id="submitBtn2" type="button" class="btn btn-primary w-100 mt-1 py-2"
                                     onclick="submit()">
                                     <i class="me-3 fa-solid fa-circle-plus"></i>
                                     Submit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3" data-bs-theme="dark">
+                    <div class="card-header">
+                        <h5>Attendance Configuration</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-floating mb-3 ">
+                                    <select class="form-select bg-dark" id="clockInDateConfigSelect"
+                                        aria-label="Floating label select example"
+                                        onchange="disableDependencyInput('clockInDateConfigSelect', 'clockInDateInput', 'current')">
+                                        <option disabled>Select arrival date</option>
+                                        <option value="current" selected>Current Date</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                    <label for="clockInDateConfigSelect" class="text-light">Clock-in Date</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control bg-dark" id="clockInDateInput"
+                                        data-bs-theme="dark">
+                                    <label for="clockInDateInput" class="text-light">Custom Date</label>
+                                </div>
+                            </div>
+
+                            <div class="col">
+                                <div class="form-floating mb-3 ">
+                                    <select class="form-select bg-dark" id="clockInTimeConfigSelect"
+                                        aria-label="Floating label select example"
+                                        onchange="disableDependencyInput('clockInTimeConfigSelect', 'clockInTimeInput', 'current');">
+                                        <option disabled>Select arrival time</option>
+                                        <option value="current" selected>Current Time</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                    <label for="clockInTimeConfigSelect" class="text-light">Clock-in Time</label>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input type="time" class="form-control bg-dark" id="clockInTimeInput"
+                                        data-bs-theme="dark">
+                                    <label for="clockInTimeInput" class="text-light">Custom Time</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="border-light">
+                        <div class="form-floating mb-3 ">
+                            <select class="form-select bg-dark" id="lateConfigSelect"
+                                aria-label="Floating label select example"
+                                onchange="disableDependencyInput('lateConfigSelect', 'lateIntervalInput', 'current')">
+                                <option disabled>Select Late Time</option>
+                                <option value="current" selected>Current Date Time</option>
+                                <option value="custom">Custom Interval</option>
+                            </select>
+                            <label for="lateConfigSelect" class="text-light">Late Time</label>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="number" min="0" max="1440" step="1" class="form-control bg-dark"
+                                id="lateIntervalInput">
+                            <label for="lateIntervalInput" class="text-light">Late Interval (in Minutes)</label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <button id="submitBtn2" type="button" class="btn btn-success w-100 mt-1 py-2"
+                                    onclick="saveConfig()">
+                                    <i class="me-3 fa-solid fa-save"></i>
+                                    Save
                                 </button>
                             </div>
                         </div>
@@ -121,18 +188,29 @@
                         <hr class="border border-light border-2 opacity-50">
 
                         <div class="row">
-                            <div class="col">
-                                <a type="button" class="btn btn-warning w-100 mt-1 py-2" onclick="generateSummary()">
+                            <div class="col-12 ">
+                                <button class="py-2 mb-3 w-100 btn btn-warning" onclick="generateSummary()">
                                     <i class="me-3 fa-solid fa-chart-pie"></i>
                                     Generate Summary
-                                </a>
+                                </button>
                             </div>
 
-                            <div class="col">
-                                <button id="exportBtn2" class="btn btn-success bg-success-20 w-100 mt-1 py-2 mb-2"
-                                    type="button" onclick="downloadSummaryTable()">
-                                    <i class="me-3 fa-solid fa-file-image"></i>Save Summary as PNG
-                                </button>
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button id="exportBtn2" class="py-2 mb-2 w-100 btn btn-primary bg-primary-20"
+                                            type="button" onclick="downloadSummaryTable()">
+                                            <i class="me-3 fa-solid fa-file-image"></i>Download (.png)
+                                        </button>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <button id="exportBtn2" class="py-2 mb-2 w-100 btn btn-success bg-success-20"
+                                            type="button" onclick="exportData()">
+                                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -213,10 +291,6 @@
         <div class="container-fluid">
             <div class="mb-3 w-100">
                 <div class="d-flex justify-content-center">
-                    <button id="exportBtn" class="btn btn-success bg-success-20 w-50 mt-2 me-1 py-2" type="button"
-                        onclick="exportData()">
-                        <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
-                    </button>
                     <button id="submitBtn" type="button" class="btn btn-primary w-50 mt-2 ms-1 py-2"
                         data-bs-toggle="modal" data-bs-target="#addStudentModal">
                         <i class="me-3 fa-solid fa-circle-plus"></i>
@@ -233,7 +307,9 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.1/xlsx.full.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <!-- Include dom-to-image library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"
+    crossOrigin="anonymous"></script> -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 <script type="text/javascript" src="script.js"></script>
 
 </html>

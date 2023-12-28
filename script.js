@@ -1,6 +1,7 @@
 let counter = 1;
 let hasReset = false;
 let users = [];
+let config = {};
 let maxId = 0;
 let clearBtn = document.querySelector("#clearBtn");
 let errorMessage = document.querySelector("#errorMessage");
@@ -16,6 +17,7 @@ let resultList = document.querySelector("#resultList");
 let exportBtn = document.querySelector("#exportBtn");
 
 setupTable();
+setupConfig();
 
 async function submit() {
     if (window.screen.width >= 767.98) {
@@ -158,11 +160,57 @@ function addRow(user) {
     counter++;
 }
 
+function generateArrivalDateTime(late = false) {
+    var currentDate = new Date();
+    try {
+        if (config.clockInDateType === 'custom') {
+            var dateConfig = config.clockInDate;
+            var [year, month, day] = dateConfig.split('-');
+            currentDate.setFullYear(year);
+            currentDate.setMonth(month - 1); // Note: month is 0-indexed
+            currentDate.setDate(day);
+        }
+
+        if (!isNaN(currentDate.getTime())) {
+            if (config.clockInTimeType === 'current') {
+                return currentDate;
+            }
+
+            var timeConfig = config.clockInTime;
+            var [hours, minutes] = timeConfig.split(':');
+            if (late && config.lateType === 'custom') {
+                minutes = parseInt(minutes);
+                minutes += parseInt(config.lateInterval);
+            }
+
+            currentDate.setHours(hours);
+            currentDate.setMinutes(minutes);
+            currentDate.setSeconds(0);
+
+            if (isNaN(currentDate.getTime())) {
+                currentDate = new Date();
+            }
+
+            if (late && config.lateType === 'current') {
+                currentDate = new Date();
+            }
+
+            return currentDate;
+        } else {
+            return new Date();
+        }
+    } catch (error) {
+        console.log(error);
+        return new Date();
+    }
+}
+
+
 function check(id) {
     var foundIndex = users.findIndex(u => u.id == id);
     users[foundIndex].check = !users[foundIndex].check;
     if (users[foundIndex].check) {
-        users[foundIndex].Arrival = new Date();
+        users[foundIndex].Arrival = generateArrivalDateTime();
     } else {
         users[foundIndex].Arrival = null;
 
@@ -187,7 +235,11 @@ function checkLate(id) {
 
         // If the student is marked late, set the Arrival property to the current date and time
         if (users[foundIndex].late) {
-            users[foundIndex].Arrival = new Date();
+            users[foundIndex].Arrival = generateArrivalDateTime(true);
+        } else {
+            if (config.clockInTimeType === 'custom' || config.clockInDateType === 'custom') {
+                users[foundIndex].Arrival = generateArrivalDateTime(false);
+            }
         }
 
         updateAllItem();
@@ -197,7 +249,6 @@ function checkLate(id) {
         checkLate(id);
     }
 }
-
 
 function calculateAttendancePercentage(array) {
     let attendanceCount = 0;
@@ -367,6 +418,7 @@ function generateHTMLTable(objects) {
 
     html += '</table>';
     document.getElementById('summary-container').innerHTML = html;
+    showInfo('Summary updated!');
 }
 
 function editCell(cell) {
@@ -375,7 +427,7 @@ function editCell(cell) {
     let input = document.createElement('input');
     input.type = 'text';
     input.value = originalContent;
-    input.onblur = function() {
+    input.onblur = function () {
         cell.textContent = this.value;
     };
     cell.appendChild(input);
@@ -401,23 +453,65 @@ function sortTable(column) {
 }
 
 
-function downloadDivAsImage(divId, fileName) {
-    // Get the HTML element to capture
+// function downloadDivAsImage(divId, fileName) {
+//     // Get the HTML element to capture
+//     const element = document.getElementById(divId);
+
+//     // Use dom-to-image to capture the content as an image
+//     domtoimage.toBlob(element)
+//         .then(blob => {
+//             // Create a link element and set its attributes
+//             const link = document.createElement('a');
+//             link.href = URL.createObjectURL(blob);
+//             link.download = fileName || 'download.png';
+
+//             // Trigger a click on the link to start the download
+//             link.click();
+//         })
+//         .catch(error => {
+//             console.error('Error capturing div as image:', error);
+//         });
+// }
+
+function downloadFullDivAsImage(divId, fileName) {
     const element = document.getElementById(divId);
 
-    // Use dom-to-image to capture the content as an image
-    domtoimage.toBlob(element)
-        .then(blob => {
+    // Adjust the zoom level to fit the content
+    function adjustZoomToAvoidOverflow(element) {
+        let zoomLevel = 1;
+
+        function isOverflowing(element) {
+            return element.scrollHeight > element.clientHeight || element.scrollWidth > element.clientWidth;
+        }
+
+        while (isOverflowing(element) && zoomLevel > 0.1) {
+            zoomLevel -= 0.1;
+            element.style.zoom = zoomLevel;
+        }
+    }
+
+    adjustZoomToAvoidOverflow(element);
+
+    // Use html2canvas to capture the content as an image
+    html2canvas(element, {
+        scrollY: -window.scrollY,
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight
+    })
+        .then(canvas => {
+            // Reset the zoom level after capturing the image
+            element.style.zoom = 1;
+
             // Create a link element and set its attributes
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = fileName || 'download.png';
+            link.href = canvas.toDataURL();
+            link.download = fileName || 'full_div_image.png';
 
             // Trigger a click on the link to start the download
             link.click();
         })
         .catch(error => {
-            console.error('Error capturing div as image:', error);
+            console.error('Error capturing full div as image:', error);
         });
 }
 
@@ -431,10 +525,77 @@ function downloadSummaryTable() {
     let dateString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
     let filename = dateString + '_Attendance.png';
 
-    downloadDivAsImage('summary-container', filename);
+    // downloadDivAsImage('summary-container', filename);
+    downloadFullDivAsImage('summary-container', filename);
 }
 
+function disableDependencyInput(elId, targetElId, value) {
+    var selectElement = document.getElementById(elId);
+    var inputElement = document.getElementById(targetElId);
 
+    // Check the selected option value
+    if (selectElement.value === value) {
+        // Disable the input field
+        inputElement.disabled = true;
+        inputElement.style.opacity = 0.25;
+    } else {
+        // Enable the input field
+        inputElement.disabled = false;
+        inputElement.style.opacity = 1;
+    }
+}
+
+function saveConfig() {
+    let clockInDateType = document.getElementById("clockInDateConfigSelect").value ?? 'current';
+    let clockInDate = document.getElementById("clockInDateInput").value ?? null;
+    let clockInTimeType = document.getElementById("clockInTimeConfigSelect").value ?? 'current';
+    let clockInTime = document.getElementById("clockInTimeInput").value ?? null;
+    let lateType = document.getElementById("lateConfigSelect").value ?? 'current';
+    let lateInterval = document.getElementById("lateIntervalInput").value ?? null;
+
+    config = {
+        clockInDateType: clockInDateType,
+        clockInDate: clockInDate,
+        clockInTimeType: clockInTimeType,
+        clockInTime: clockInTime,
+        lateType: lateType,
+        lateInterval: lateInterval,
+    }
+
+    localStorage.setItem("attendanceConfig", JSON.stringify(config));
+    showSuccess('Config Saved');
+}
+
+function getConfig() {
+    return new Promise(function (resolve, reject) {
+        let config = localStorage.getItem("attendanceConfig");
+        if (config) {
+            resolve(JSON.parse(config));
+        } else {
+            reject(createError(500, 'No Config saved'));
+        }
+    });
+}
+
+async function setupConfig() {
+    try {
+        config = await getConfig();
+
+        document.getElementById("clockInDateConfigSelect").value = config.clockInDateType ?? 'current';
+        document.getElementById("clockInDateInput").value = config.clockInDate;
+        document.getElementById("clockInTimeConfigSelect").value = config.clockInTimeType ?? 'current';
+        document.getElementById("clockInTimeInput").value = config.clockInTime;
+        document.getElementById("lateConfigSelect").value = config.lateType ?? 'current';
+        document.getElementById("lateIntervalInput").value = config.lateInterval;
+
+        disableDependencyInput('clockInDateConfigSelect', 'clockInDateInput', 'current');
+        disableDependencyInput('clockInTimeConfigSelect', 'clockInTimeInput', 'current');
+        disableDependencyInput('lateConfigSelect', 'lateIntervalInput', 'current');
+    } catch (error) {
+        config = {};
+        console.log(error);
+    }
+}
 
 function createError(statusCode, message) {
     let error = {

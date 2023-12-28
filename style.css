@@ -13,21 +13,26 @@ body {
     border-color: #ff5203;
 }
 
-.mh-48vh{
+.mh-48vh {
     max-height: 48vh;
 }
-.bg-success-20{
-    background-color: rgb(15, 146, 15,0.2);
+
+.bg-primary-20 {
+    background-color: rgb(10, 83, 190, 0.2);
 }
 
-.w-64{
+.bg-success-20 {
+    background-color: rgb(15, 146, 15, 0.2);
+}
+
+.w-64 {
     width: 64px;
 }
 
-.w-80{
+.w-80 {
     width: 80px;
 }
 
-.w-96{
+.w-96 {
     width: 96px;
 }

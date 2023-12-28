@@ -334,9 +334,11 @@ function exportData() {
     XLSX.writeFile(wb, filename);
 }
 
+let objects; // Declare objects globally
+
 function generateSummary() {
-    let objects = prepareExportData();
-    generateHTMLTable(objects)
+    objects = prepareExportData(); // Assign data to objects
+    generateHTMLTable(objects);
 }
 
 function generateHTMLTable(objects) {
@@ -344,7 +346,7 @@ function generateHTMLTable(objects) {
 
     html += '<tr class="bg-light">';
     for (let key in objects[0]) {
-        html += `<th>${key}</th>`;
+        html += `<th onclick="sortTable('${key}')">${key}</th>`;
     }
     html += '</tr>';
 
@@ -360,6 +362,24 @@ function generateHTMLTable(objects) {
     html += '</table>';
     document.getElementById('summary-container').innerHTML = html;
 }
+
+function sortTable(column) {
+    // Sort objects based on the specified column
+    objects.sort((a, b) => {
+        let A = a[column];
+        let B = b[column];
+
+        if (!isNaN(A) && !isNaN(B)) {
+            return A - B;
+        } else {
+            return A.localeCompare(B);
+        }
+    });
+
+    // Regenerate the table with sorted objects
+    generateHTMLTable(objects);
+}
+
 
 function downloadDivAsImage(divId, fileName) {
     // Get the HTML element to capture
@@ -382,13 +402,19 @@ function downloadDivAsImage(divId, fileName) {
 }
 
 function downloadSummaryTable() {
-    generateSummary();
+    // Check if the summary table exists
+    if (!document.getElementById('summary-table')) {
+        generateSummary();
+    }
+
     let nowDate = new Date();
     let dateString = nowDate.getFullYear() + '-' + (nowDate.getMonth() + 1) + '-' + nowDate.getDate();
     let filename = dateString + '_Attendance.png';
 
     downloadDivAsImage('summary-container', filename);
 }
+
+
 
 function createError(statusCode, message) {
     let error = {

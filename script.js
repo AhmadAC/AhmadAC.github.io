@@ -354,7 +354,7 @@ function generateHTMLTable(objects) {
     for (let i = 0; i < objects.length; i++) {
         html += '<tr>';
         for (let key in objects[i]) {
-            html += `<td style="white-space: nowrap;">${objects[i][key]}</td>`;
+            html += `<td style="white-space: nowrap;" ondblclick="editCell(this)">${objects[i][key]}</td>`;
         }
         html += '</tr>';
     }
@@ -362,6 +362,20 @@ function generateHTMLTable(objects) {
     html += '</table>';
     document.getElementById('summary-container').innerHTML = html;
 }
+
+function editCell(cell) {
+    let originalContent = cell.textContent;
+    cell.textContent = '';
+    let input = document.createElement('input');
+    input.type = 'text';
+    input.value = originalContent;
+    input.onblur = function() {
+        cell.textContent = this.value;
+    };
+    cell.appendChild(input);
+    input.focus();
+}
+
 
 function sortTable(column) {
     // Sort objects based on the specified column

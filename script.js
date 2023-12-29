@@ -425,7 +425,7 @@ function generateHTMLTable(objects) {
             sortIcon = `<span id="${key + 'SortIcon'}"><i class="fa-solid fa-${icon}"></i></span>`
         }
 
-        html += `<th ${onClickFn}> ${key} ${sortIcon}</th>`;
+        html += `<th style="white-space: nowrap;" ${onClickFn}> ${key} ${sortIcon}</th>`;
     }
 
     html += '</tr>';

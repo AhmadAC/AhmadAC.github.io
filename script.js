@@ -399,7 +399,7 @@ function generateSummary() {
 }
 
 function generateHTMLTable(objects) {
-    let html = '<table id="summary-table" border="1" class="table table-striped table-light table-hover w-100 mb-0">';
+    let html = '<table id="summary-table" border="1" class="table table-light table-hover w-100 mb-0">';
 
     html += '<tr class="bg-light">';
     for (let key in objects[0]) {
@@ -411,7 +411,9 @@ function generateHTMLTable(objects) {
     for (let i = 0; i < objects.length; i++) {
         html += '<tr>';
         for (let key in objects[i]) {
-            html += `<td style="white-space: nowrap;" ondblclick="editCell(this)">${objects[i][key]}</td>`;
+            let color = '#ffffff';
+            if ((i + 1) % 2 == 0) color = '#f2f2f2';
+            html += `<td style="white-space: nowrap; background-color:${color};" ondblclick="editCell(this)">${objects[i][key]}</td>`;
         }
         html += '</tr>';
     }

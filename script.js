@@ -2,6 +2,10 @@ let counter = 1;
 let hasReset = false;
 let users = [];
 let config = {};
+let report = {
+    updatedAt: null
+};
+
 let maxId = 0;
 let clearBtn = document.querySelector("#clearBtn");
 let errorMessage = document.querySelector("#errorMessage");
@@ -180,7 +184,7 @@ function generateArrivalDateTime(late = false) {
             var [hours, minutes] = timeConfig.split(':');
             if (late && config.lateType === 'custom') {
                 minutes = parseInt(minutes);
-                minutes += parseInt(config.lateInterval);
+                minutes += parseInt(config.lateOffset);
             }
 
             currentDate.setHours(hours);
@@ -395,11 +399,13 @@ let objects; // Declare objects globally
 
 function generateReport() {
     objects = prepareExportData(); // Assign data to objects
+    report.updatedAt = new Date().toLocaleString();
     generateHTMLTable(objects);
 }
 
 function generateHTMLTable(objects) {
-    let html = '<table id="summary-table" border="1" class="table table-light table-hover w-100 mb-0">';
+    document.getElementById('reportUpdatedAt').innerHTML = report.updatedAt ?? '';
+    let html = '<table id="summary-table" border="1" class="table table-light table-hover w-100 mt-0 mb-0">';
 
     html += '<tr class="bg-light">';
     for (let key in objects[0]) {
@@ -500,7 +506,9 @@ function downloadFullDivAsImage(divId, fileName) {
     html2canvas(element, {
         scrollY: -window.scrollY,
         windowWidth: element.scrollWidth,
-        windowHeight: element.scrollHeight
+        windowHeight: element.scrollHeight,
+        allowTaint: true,
+        useCORS: true,
     })
         .then(canvas => {
             // Reset the zoom level after capturing the image
@@ -555,7 +563,7 @@ function saveConfig() {
     let clockInTimeType = document.getElementById("clockInTimeConfigSelect").value ?? 'current';
     let clockInTime = document.getElementById("clockInTimeInput").value ?? null;
     let lateType = document.getElementById("lateConfigSelect").value ?? 'current';
-    let lateInterval = document.getElementById("lateIntervalInput").value ?? null;
+    let lateOffset = document.getElementById("lateOffsetInput").value ?? null;
     let evenRowReportColor = document.getElementById("evenReportRowColorInput").value ?? '#f2f2f2';
     let oddRowReportColor = document.getElementById("oddReportRowColorInput").value ?? '#ffffff';
     let textRowReportColor = document.getElementById("textReportRowColorInput").value ?? '#000000';
@@ -566,7 +574,7 @@ function saveConfig() {
         clockInTimeType: clockInTimeType,
         clockInTime: clockInTime,
         lateType: lateType,
-        lateInterval: lateInterval,
+        lateOffset: lateOffset,
         oddRowReportColor: oddRowReportColor,
         evenRowReportColor: evenRowReportColor,
         textRowReportColor: textRowReportColor
@@ -596,7 +604,7 @@ async function setupConfig() {
         document.getElementById("clockInTimeConfigSelect").value = config.clockInTimeType ?? 'current';
         document.getElementById("clockInTimeInput").value = config.clockInTime;
         document.getElementById("lateConfigSelect").value = config.lateType ?? 'current';
-        document.getElementById("lateIntervalInput").value = config.lateInterval;
+        document.getElementById("lateOffsetInput").value = config.lateOffset;
         document.getElementById("evenReportRowColorInput").value = config.evenRowReportColor ?? '#f2f2f2';
         document.getElementById("oddReportRowColorInput").value = config.oddRowReportColor ?? '#ffffff';
         document.getElementById("textReportRowColorInput").value = config.textRowReportColor ?? '#000000';
@@ -607,7 +615,7 @@ async function setupConfig() {
 
     disableDependencyInput('clockInDateConfigSelect', 'clockInDateInput', 'current');
     disableDependencyInput('clockInTimeConfigSelect', 'clockInTimeInput', 'current');
-    disableDependencyInput('lateConfigSelect', 'lateIntervalInput', 'current');
+    disableDependencyInput('lateConfigSelect', 'lateOffsetInput', 'current');
 }
 
 function createError(statusCode, message) {

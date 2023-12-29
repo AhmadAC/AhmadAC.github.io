@@ -98,18 +98,18 @@
                         <div class="form-floating mb-3 ">
                             <select class="form-select bg-dark" id="lateConfigSelect"
                                 aria-label="Floating label select example"
-                                onchange="disableDependencyInput('lateConfigSelect', 'lateIntervalInput', 'current')">
+                                onchange="disableDependencyInput('lateConfigSelect', 'lateOffsetInput', 'current')">
                                 <option disabled>Select Late Time</option>
                                 <option value="current" selected>Current Date Time</option>
-                                <option value="custom">Custom Interval</option>
+                                <option value="custom">Custom</option>
                             </select>
                             <label for="lateConfigSelect" class="text-light">Late Time</label>
                         </div>
 
                         <div class="form-floating mb-3">
                             <input type="number" min="0" max="1440" step="1" class="form-control bg-dark"
-                                id="lateIntervalInput">
-                            <label for="lateIntervalInput" class="text-light">Late Interval (in Minutes)</label>
+                                id="lateOffsetInput">
+                            <label for="lateOffsetInput" class="text-light">Offset (in Minutes)</label>
                         </div>
 
                         <hr class="border-light">
@@ -210,21 +210,7 @@
                             </div>
                         </div>
 
-                        <p id="errorMessage"
-                            class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-danger rounded text-danger bg-opacity-10 border border-danger">
-                            Error Message
-                        </p>
-                        <p id="successMessage"
-                            class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-success rounded text-success bg-opacity-10 border border-success">
-                            Success Message
-                        </p>
-                        <p id="infoMessage"
-                            class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-info rounded text-info bg-opacity-10 border border-info">
-                            Info Message
-                        </p>
-
                         <hr class="border border-light border-2 opacity-50">
-
                         <div class="row">
                             <div class="col-12 ">
                                 <button class="py-2 mb-3 w-100 btn btn-warning" onclick="generateReport()">
@@ -253,6 +239,20 @@
                         </div>
 
                         <hr class="border border-light border-2 opacity-50">
+                        <p id="errorMessage"
+                            class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-danger rounded text-danger bg-opacity-10 border border-danger">
+                            Error Message
+                        </p>
+                        <p id="successMessage"
+                            class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-success rounded text-success bg-opacity-10 border border-success">
+                            Success Message
+                        </p>
+                        <p id="infoMessage"
+                            class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-info rounded text-info bg-opacity-10 border border-info">
+                            Info Message
+                        </p>
+
+
                         <div>
                             <table class="table mb-0">
                                 <thead>
@@ -286,6 +286,9 @@
     <div class="container mt-3" data-bs-theme="dark">
         <div class="card">
             <div class="card-body">
+                <h5 class="mb-3">
+                    Report Generated at: <span id="reportUpdatedAt"></span>
+                </h5>
                 <div id="summary-container" class="overflow-scroll rounded">
                 </div>
             </div>

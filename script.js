@@ -393,7 +393,7 @@ function exportData() {
 
 let objects; // Declare objects globally
 
-function generateSummary() {
+function generateReport() {
     objects = prepareExportData(); // Assign data to objects
     generateHTMLTable(objects);
 }
@@ -411,10 +411,12 @@ function generateHTMLTable(objects) {
     for (let i = 0; i < objects.length; i++) {
         html += '<tr>';
         for (let key in objects[i]) {
-            let color = '#ffffff';
-            if ((i + 1) % 2 == 0) color = '#f2f2f2';
-            html += `<td style="white-space: nowrap; background-color:${color};" ondblclick="editCell(this)">${objects[i][key]}</td>`;
+            let color = config && config.oddRowReportColor ? config.oddRowReportColor : '#ffffff';
+            let textColor = config && config.textRowReportColor ? config.textRowReportColor : '#000000'
+            if ((i + 1) % 2 == 0) color = config && config.evenRowReportColor ? config.evenRowReportColor : '#f2f2f2';
+            html += `<td style="white-space: nowrap; background-color:${color}; color:${textColor};" ondblclick="editCell(this)">${objects[i][key]}</td>`;
         }
+
         html += '</tr>';
     }
 
@@ -520,7 +522,7 @@ function downloadFullDivAsImage(divId, fileName) {
 function downloadSummaryTable() {
     // Check if the summary table exists
     if (!document.getElementById('summary-table')) {
-        generateSummary();
+        generateReport();
     }
 
     let nowDate = new Date();
@@ -554,6 +556,9 @@ function saveConfig() {
     let clockInTime = document.getElementById("clockInTimeInput").value ?? null;
     let lateType = document.getElementById("lateConfigSelect").value ?? 'current';
     let lateInterval = document.getElementById("lateIntervalInput").value ?? null;
+    let evenRowReportColor = document.getElementById("evenReportRowColorInput").value ?? '#f2f2f2';
+    let oddRowReportColor = document.getElementById("oddReportRowColorInput").value ?? '#ffffff';
+    let textRowReportColor = document.getElementById("textReportRowColorInput").value ?? '#000000';
 
     config = {
         clockInDateType: clockInDateType,
@@ -562,6 +567,9 @@ function saveConfig() {
         clockInTime: clockInTime,
         lateType: lateType,
         lateInterval: lateInterval,
+        oddRowReportColor: oddRowReportColor,
+        evenRowReportColor: evenRowReportColor,
+        textRowReportColor: textRowReportColor
     }
 
     localStorage.setItem("attendanceConfig", JSON.stringify(config));
@@ -589,6 +597,9 @@ async function setupConfig() {
         document.getElementById("clockInTimeInput").value = config.clockInTime;
         document.getElementById("lateConfigSelect").value = config.lateType ?? 'current';
         document.getElementById("lateIntervalInput").value = config.lateInterval;
+        document.getElementById("evenReportRowColorInput").value = config.evenRowReportColor ?? '#f2f2f2';
+        document.getElementById("oddReportRowColorInput").value = config.oddRowReportColor ?? '#ffffff';
+        document.getElementById("textReportRowColorInput").value = config.textRowReportColor ?? '#000000';
     } catch (error) {
         config = {};
         console.log(error);

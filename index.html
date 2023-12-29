@@ -56,6 +56,7 @@
                         <h5>Attendance Configuration</h5>
                     </div>
                     <div class="card-body">
+                        <h6 class="mb-3">Date & Time</h6>
                         <div class="row">
                             <div class="col">
                                 <div class="form-floating mb-3 ">
@@ -94,7 +95,6 @@
                             </div>
                         </div>
 
-                        <hr class="border-light">
                         <div class="form-floating mb-3 ">
                             <select class="form-select bg-dark" id="lateConfigSelect"
                                 aria-label="Floating label select example"
@@ -110,6 +110,44 @@
                             <input type="number" min="0" max="1440" step="1" class="form-control bg-dark"
                                 id="lateIntervalInput">
                             <label for="lateIntervalInput" class="text-light">Late Interval (in Minutes)</label>
+                        </div>
+
+                        <hr class="border-light">
+                        <h6 class="mb-3">Report</h6>
+
+                        <div class="row">
+                            <div class="col">
+                                <div class="row mb-3">
+                                    <div class="col align-self-center">
+                                        <label for="oddReportRowColorInput" class="form-label text-light mb-0">Odd Row
+                                            Color</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="color" class="form-control form-control-color bg-dark"
+                                            id="oddReportRowColorInput" value="#ffffff" title="Choose your color">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col align-self-center">
+                                        <label for="evenReportRowColorInput" class="form-label text-light mb-0">Even Row
+                                            Color</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="color" class="form-control form-control-color bg-dark"
+                                            id="evenReportRowColorInput" value="#f2f2f2" title="Choose your color">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col align-self-center">
+                                        <label for="textReportRowColorInput" class="form-label text-light mb-0">Text
+                                            Color</label>
+                                    </div>
+                                    <div class="col">
+                                        <input type="color" class="form-control form-control-color bg-dark"
+                                            id="textReportRowColorInput" value="#000000" title="Choose your color">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -189,9 +227,9 @@
 
                         <div class="row">
                             <div class="col-12 ">
-                                <button class="py-2 mb-3 w-100 btn btn-warning" onclick="generateSummary()">
+                                <button class="py-2 mb-3 w-100 btn btn-warning" onclick="generateReport()">
                                     <i class="me-3 fa-solid fa-chart-pie"></i>
-                                    Generate Summary
+                                    Generate Report
                                 </button>
                             </div>
 

@@ -17,6 +17,10 @@ body {
     max-height: 48vh;
 }
 
+.mh-64vh {
+    max-height: 64vh;
+}
+
 .bg-primary-20 {
     background-color: rgb(10, 83, 190, 0.2);
 }

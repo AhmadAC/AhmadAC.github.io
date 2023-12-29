@@ -6,6 +6,11 @@ let report = {
     updatedAt: null
 };
 
+let sortedColumn = {
+    key: null,
+    status: 0
+};
+
 let maxId = 0;
 let clearBtn = document.querySelector("#clearBtn");
 let errorMessage = document.querySelector("#errorMessage");
@@ -209,7 +214,6 @@ function generateArrivalDateTime(late = false) {
     }
 }
 
-
 function check(id) {
     var foundIndex = users.findIndex(u => u.id == id);
     users[foundIndex].check = !users[foundIndex].check;
@@ -396,7 +400,6 @@ function exportData() {
 }
 
 let objects; // Declare objects globally
-
 function generateReport() {
     objects = prepareExportData(); // Assign data to objects
     report.updatedAt = new Date().toLocaleString();
@@ -410,18 +413,35 @@ function generateHTMLTable(objects) {
 
     html += '<tr class="bg-light">';
     for (let key in objects[0]) {
-        html += `<th onclick="sortTable('${key}')">${key}</th>`;
-    }
-    html += '</tr>';
+        let icon = 'sort';
+        if (key == sortedColumn.key && sortedColumn.status != 0) {
+            icon = sortedColumn.status == 1 ? 'sort-down' : 'sort-up';
+        }
 
-    // Add table body rows with alternating colors
+        let onClickFn = '';
+        let sortIcon = '';
+        if (key != 'Number') {
+            onClickFn = `onclick="sortTable('${key}')"`;
+            sortIcon = `<span id="${key + 'SortIcon'}"><i class="fa-solid fa-${icon}"></i></span>`
+        }
+
+        html += `<th ${onClickFn}> ${key} ${sortIcon}</th>`;
+    }
+
+    html += '</tr>';
     for (let i = 0; i < objects.length; i++) {
         html += '<tr>';
         for (let key in objects[i]) {
             let color = config && config.oddRowReportColor ? config.oddRowReportColor : '#ffffff';
             let textColor = config && config.textRowReportColor ? config.textRowReportColor : '#000000'
             if ((i + 1) % 2 == 0) color = config && config.evenRowReportColor ? config.evenRowReportColor : '#f2f2f2';
-            html += `<td style="white-space: nowrap; background-color:${color}; color:${textColor};" ondblclick="editCell(this)">${objects[i][key]}</td>`;
+
+            let value = objects[i][key];
+            if (key == 'Number') {
+                value = i + 1;
+            }
+
+            html += `<td style="white-space: nowrap; background-color:${color}; color:${textColor};" ondblclick="editCell(this)">${value}</td>`;
         }
 
         html += '</tr>';
@@ -441,16 +461,41 @@ function editCell(cell) {
     input.onblur = function () {
         cell.textContent = this.value;
     };
+
     cell.appendChild(input);
     input.focus();
 }
 
+function getOrder(column) {
+    let order = [
+        'default',
+        'asc',
+        'desc'
+    ];
 
-function sortTable(column) {
-    // Sort objects based on the specified column
+    if (sortedColumn.key == column && sortedColumn.status < 2) {
+        sortedColumn.status += 1;
+    } else if (sortedColumn.key != column) {
+        sortedColumn.status = 1;
+    } else {
+        sortedColumn.status = 0;
+    }
+
+    sortedColumn.key = column;
+    return order[sortedColumn.status];
+}
+
+
+function sortObject(column, order) {
     objects.sort((a, b) => {
+
         let A = a[column];
         let B = b[column];
+
+        if (order === 'desc') {
+            A = b[column];
+            B = a[column];
+        }
 
         if (!isNaN(A) && !isNaN(B)) {
             return A - B;
@@ -458,6 +503,15 @@ function sortTable(column) {
             return A.localeCompare(B);
         }
     });
+}
+
+function sortTable(column) {
+    let order = getOrder(column);
+    if (order !== 'default') {
+        sortObject(column, order);
+    } else {
+        sortObject('Number', 'default');
+    }
 
     // Regenerate the table with sorted objects
     generateHTMLTable(objects);
@@ -510,22 +564,20 @@ function downloadFullDivAsImage(divId, fileName) {
         windowHeight: element.scrollHeight,
         allowTaint: true,
         useCORS: true,
-    })
-        .then(canvas => {
-            // Reset the zoom level after capturing the image
-            element.style.zoom = 1;
+    }).then(canvas => {
+        // Reset the zoom level after capturing the image
+        element.style.zoom = 1;
 
-            // Create a link element and set its attributes
-            const link = document.createElement('a');
-            link.href = canvas.toDataURL();
-            link.download = fileName || 'full_div_image.png';
+        // Create a link element and set its attributes
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL();
+        link.download = fileName || 'full_div_image.png';
 
-            // Trigger a click on the link to start the download
-            link.click();
-        })
-        .catch(error => {
-            console.error('Error capturing full div as image:', error);
-        });
+        // Trigger a click on the link to start the download
+        link.click();
+    }).catch(error => {
+        console.error('Error capturing full div as image:', error);
+    });
 }
 
 function downloadSummaryTable() {

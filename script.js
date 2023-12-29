@@ -404,6 +404,7 @@ function generateReport() {
 }
 
 function generateHTMLTable(objects) {
+    document.getElementById('generateButtonText').innerHTML = 'Update Report';
     document.getElementById('reportUpdatedAt').innerHTML = report.updatedAt ?? '';
     let html = '<table id="summary-table" border="1" class="table table-light table-hover w-100 mt-0 mb-0">';
 
@@ -428,7 +429,7 @@ function generateHTMLTable(objects) {
 
     html += '</table>';
     document.getElementById('summary-container').innerHTML = html;
-    showInfo('Summary updated!');
+    showInfo('Report updated!');
 }
 
 function editCell(cell) {

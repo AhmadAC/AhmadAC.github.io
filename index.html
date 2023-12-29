@@ -211,34 +211,6 @@
                         </div>
 
                         <hr class="border border-light border-2 opacity-50">
-                        <div class="row">
-                            <div class="col-12 ">
-                                <button class="py-2 mb-3 w-100 btn btn-warning" onclick="generateReport()">
-                                    <i class="me-3 fa-solid fa-chart-pie"></i>
-                                    Generate Report
-                                </button>
-                            </div>
-
-                            <div class="col-12">
-                                <div class="row">
-                                    <div class="col-6">
-                                        <button id="exportBtn2" class="py-2 mb-2 w-100 btn btn-primary bg-primary-20"
-                                            type="button" onclick="downloadSummaryTable()">
-                                            <i class="me-3 fa-solid fa-file-image"></i>Save (.png)
-                                        </button>
-                                    </div>
-
-                                    <div class="col-6">
-                                        <button id="exportBtn2" class="py-2 mb-2 w-100 btn btn-success bg-success-20"
-                                            type="button" onclick="exportData()">
-                                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr class="border border-light border-2 opacity-50">
                         <p id="errorMessage"
                             class="d-none mb-3 mx-0 mt-2 w-100 p-2 bg-danger rounded text-danger bg-opacity-10 border border-danger">
                             Error Message
@@ -286,9 +258,42 @@
     <div class="container mt-3" data-bs-theme="dark">
         <div class="card">
             <div class="card-body">
-                <h5 class="mb-3">
-                    Report Generated at: <span id="reportUpdatedAt"></span>
-                </h5>
+                <div class="row mb-3">
+                    <div class="col-12 col-lg-6 align-self-center">
+                        <h5>
+                            Report Generated at: <span id="reportUpdatedAt"></span>
+                        </h5>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="row">
+                            <div class="col-12 col-lg-4">
+                                <button class="py-2 mb-3 w-100 btn btn-warning" onclick="generateReport()">
+                                    <i class="me-3 fa-solid fa-table"></i>
+                                    <span id="generateButtonText">Generate Report</span>
+                                </button>
+                            </div>
+
+                            <div class="col-12 col-lg-8">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <button id="exportBtn2" class="py-2 mb-2 w-100 btn btn-primary bg-primary-20"
+                                            type="button" onclick="downloadSummaryTable()">
+                                            <i class="me-3 fa-solid fa-file-image"></i>Save (.png)
+                                        </button>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <button id="exportBtn2" class="py-2 mb-2 w-100 btn btn-success bg-success-20"
+                                            type="button" onclick="exportData()">
+                                            <i class="me-3 fa-solid fa-file-arrow-down"></i>Export (.xlsx)
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="summary-container" class="overflow-scroll rounded">
                 </div>
             </div>
